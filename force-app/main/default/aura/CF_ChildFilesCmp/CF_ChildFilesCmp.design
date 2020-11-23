@@ -25,6 +25,10 @@ License: BSD 3-Clause License
                       datasource="apex://CF_ChildFilesFieldSetDynamicPicklist"
                       description="Determines the fields the component displays. Options come from the Content Version object."/>
 
+    <design:supportedFormFactors>
+        <design:supportedFormFactor type="Large"/>
+        <design:supportedFormFactor type="Small"/>
+    </design:supportedFormFactors>
 </design:component>
 <!--
 BSD 3-Clause License
