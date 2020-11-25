@@ -8,6 +8,11 @@ License: BSD 3-Clause License
     padding: 0;
     background-color: token(colorBackgroundChromeDesktop);
 }
+.THIS .hidebtn {
+  display: none;
+
+}
+
 /*
 BSD 3-Clause License
 

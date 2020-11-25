@@ -89,7 +89,6 @@ License: BSD 3-Clause License
     },
 
     onChildRelationshipClick : function( component, event, helper ) {
-
         var childRelationshipFiles = component.get( 'v.childRelationshipFiles' );
         var selectedIndex = component.get( 'v.selectedIndex' );
         var clickedIndex = event.currentTarget.getAttribute( 'data-index' );
@@ -126,6 +125,60 @@ License: BSD 3-Clause License
 
         helper.navigateToRecord( clickedUserId );
 
+    },
+
+    changeSelect: function (cmp, event, helper) {
+        //Press button to change the selected option
+        cmp.find("select").set("v.value", "closed");
+    },
+
+    handleChange: function (component, event, helper) {
+        //Do something with the change handler
+        //alert(event.getParam('value'));
+        var selectedobjvalue = event.getParam('value');
+        console.log('selectedobjvalue: '+selectedobjvalue);
+        var valArr = selectedobjvalue.split(':');
+        var clickedIndex = parseInt(valArr[0]);
+        var selectedIndex = parseInt(valArr[0]);
+        console.log('clickedIndex: '+clickedIndex); 
+        console.log('selectedIndex: '+selectedIndex);
+
+        var childRelationshipFiles = component.get( 'v.childRelationshipFiles' );
+        console.log('childRelationshipFiles: '+JSON.stringify(childRelationshipFiles));
+        //console.log('childRelationshipFiles[clickedIndex]: '+JSON.stringify(childRelationshipFiles[clickedIndex]));
+
+        if (Array.isArray(childRelationshipFiles) && childRelationshipFiles.length) {
+            console.log('If');
+            if(!clickedIndex.isNaN){
+                component.set( 'v.selectedFiles', childRelationshipFiles[clickedIndex].files );
+                component.set( 'v.childRelationshipFiles', childRelationshipFiles );
+                component.set( 'v.selectedIndex', clickedIndex );
+                component.set( 'v.selectedRelationship', childRelationshipFiles[clickedIndex] );
+        
+                helper.getRelatedFilesForIndexAsync( component, clickedIndex, false )
+                .catch( $A.getCallback( function( err ) {
+                    helper.toastMessage( 'Sorry, error getting files', err, 'error' );
+        
+                }));
+            }       
+        }else{
+            console.log('Empty Array');
+        }
+
+        //childRelationshipFiles[selectedIndex].selected = false;
+        //childRelationshipFiles[clickedIndex].selected = true;
+        /*
+        component.set( 'v.selectedFiles', childRelationshipFiles[3].files );
+        component.set( 'v.childRelationshipFiles', childRelationshipFiles );
+        component.set( 'v.selectedIndex', 3 );
+        component.set( 'v.selectedRelationship', childRelationshipFiles[3] );
+
+        helper.getRelatedFilesForIndexAsync( component, 3, false )
+        .catch( $A.getCallback( function( err ) {
+            helper.toastMessage( 'Sorry, error getting files', err, 'error' );
+
+        }));
+        */
     }
 })
 /*

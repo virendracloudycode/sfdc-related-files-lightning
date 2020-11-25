@@ -73,6 +73,8 @@ License: BSD 3-Clause License
     <!-- Events -->
 
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:attribute name="status" type="String"/>
+    <aura:handler name="change" value="{!v.status}" action="{!c.handleChange}"/>
 
     <!-- Markup -->
 
@@ -89,49 +91,33 @@ License: BSD 3-Clause License
             </span>
         </aura:set>
 
-        <lightning:layout>
+        <lightning:layout multipleRows="true">
+            <div class="slds">
+                <lightning:layoutItem>
 
-            <lightning:layoutItem size="3" class="slds-m-horizontal_small slds-p-right_small slds-border_right">
-
-                <nav class="slds-nav-vertical slds-box cf-relationship-nav" aria-label="{!v.componentCardTitle}">
-                    <div class="slds-nav-vertical__section">
-                        <ul>
-                            <aura:iteration var="relationship" items="{!v.childRelationshipFiles}" indexVar="index">
-                                <li class="{! 'slds-nav-vertical__item ' + if( relationship.selected, 'slds-is-active', '' )}">
-                                    <a href="javascript:void(0);"
-                                       class="slds-nav-vertical__action"
-                                       title="{!relationship.describe.objectLabelPlural + ' (' + relationship.name + ')'}"
-                                       data-index="{!index}"
-                                       onclick="{!c.onChildRelationshipClick}">
-
-                                        {!relationship.describe.relationshipLabel}
-
-                                        <span class="{! 'slds-badge slds-col_bump-left ' + if( greaterthan( relationship.files.length, 0 ), 'slds-theme_success', '' )}">
-                                            <span class="slds-assistive-text">:</span>
-                                            {!relationship.files.length}
-                                            <span class="slds-assistive-text">Files</span>
-                                        </span>
-
-                                    </a>
-                                </li>
-                            </aura:iteration>
-                        </ul>
+                    <lightning:select aura:id="select" name="select" label="Select Related Object" value="{!v.status}">
+                        <option value="">choose one...</option>
+                        <aura:iteration var="relationship" items="{!v.childRelationshipFiles}" indexVar="index">
+                            <option value="{!index+':'+relationship.name}" text="{!relationship.describe.objectLabelPlural}">
+                            </option>
+                        </aura:iteration>
+                    </lightning:select>
+                    <div class="hidebtn">
+                        <lightning:button name="selectChange" label="Change" onclick="{!c.changeSelect}"/>
                     </div>
-                </nav>
+                </lightning:layoutItem>
+                <br/>
+                <lightning:layoutItem>
 
-            </lightning:layoutItem>
+                    <lightning:datatable aura:id="datatable"
+                        keyField="Id"
+                        columns="{!v.columns}"
+                        data="{!v.selectedFiles}"
+                        hideCheckboxColumn="true"
+                        showRowNumberColumn="true"/>
 
-            <lightning:layoutItem class="slds-p-right_small">
-
-                <lightning:datatable aura:id="datatable"
-                    keyField="Id"
-                    columns="{!v.columns}"
-                    data="{!v.selectedFiles}"
-                    hideCheckboxColumn="true"
-                    showRowNumberColumn="true"/>
-
-            </lightning:layoutItem>
-
+                </lightning:layoutItem>
+            </div>
         </lightning:layout>
 
     </lightning:card>
